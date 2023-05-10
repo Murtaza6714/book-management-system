@@ -3,6 +3,7 @@ import { UserController, AuthController } from "../Controllers";
 
 const router = Router();
 
+router.get('/', AuthController.redirectToLogin)
 router.get("/mark-attendance", UserController.markAttendance);
 router.get("/member-login", AuthController.getMemberLogin);
 router.get("/librarian-login", AuthController.getLibrarianLogin);

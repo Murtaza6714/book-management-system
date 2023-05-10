@@ -14,8 +14,15 @@ export const getLibrarianLogin = async (req: any, res: Response, next: NextFunct
 
 export const getMemberLogin = async (req: any, res: Response, next: NextFunction) => {
     try {
-      // return res.status(response.statusCode).json(response);
       return res.render('auth/login', { userRole: "member" })
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  export const redirectToLogin = async (req: any, res: Response, next: NextFunction) => {
+    try {
+      return res.redirect('/member-login')
     } catch (error) {
       next(error);
     }

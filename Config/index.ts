@@ -22,7 +22,14 @@ export default {
         WHOLESALER: "WHOLESALER",
         DISTRIBUTER: "DISTRIBUTER"
       },
-
+    librarianUrls: [
+        "/book/add-book",
+        "/book/edit-book",
+        "/book/books",
+    ],
+    memberUrls: [
+        "/member/borrowed-books"
+    ]
 };
 
 

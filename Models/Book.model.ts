@@ -25,6 +25,10 @@ const BookSchema = new Schema(
         enum: ["AVAILABLE", "BORROWED"],
         default: "AVAILABLE",
       },
+      isDeleted: {
+        type: Boolean,
+        default: false      
+      }
     },{
       timestamps: true
     }

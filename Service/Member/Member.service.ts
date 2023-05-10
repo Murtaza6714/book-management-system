@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 // import  { productModel } = require("../../Models"); 
 import { logger } from '../../Utils'
 import { userModel } from "../../Models/User.model";
-import { borrowBookModel } from "../../Models/BorrowBook.model";
+import { borrowBookModel, bookModel } from "../../Models";
 const ObjectId = mongoose.Types.ObjectId
 
 class MemberService extends Services {
@@ -99,6 +99,26 @@ class MemberService extends Services {
       return this.success({ statusCode: 200, message: "Borrowed books by member fetched Successfully!!", data: borrowedBooks });
     } catch (error) {
       logger.error(`Add Book failed for Error ${error}`);
+      throw (error)
+    }
+  }
+
+  async borrowBook(bookId: any, memberId: string) {
+    try {
+      logger.info('Borrow Book started for %s', bookId);
+      const newId = new ObjectId();
+      const book = await bookModel.findById(bookId).lean();
+      if(book?.status === "BORROWED") {
+        const books = await bookModel.find({ isDeleted: false }).lean();
+        return this.success({status: "error", message: "Book is already Borrowed", data: books});
+       }
+      const bookBorrow = await borrowBookModel.findByIdAndUpdate(newId, { memberId: new ObjectId(memberId), bookId: new ObjectId() }, {new: true, upsert: true}).lean()
+      const books = await bookModel.find({ isDeleted: false }).lean();
+      
+      logger.info('Borrow Book By Id completed for %s', bookId);
+      return this.success({ statusCode: 200, message: "Book Borrowed Successfully!!", data: books });
+    } catch (error) {
+      logger.error(`Borrow Book failed for Error ${error}`);
       throw (error)
     }
   }

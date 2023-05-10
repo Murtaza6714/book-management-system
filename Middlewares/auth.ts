@@ -15,6 +15,7 @@ export default function(req: any, res: Response, next: NextFunction)  {
   try {
 
     decodedToken = jwt.verify(token, config.jwtOption.secret);
+    
   } catch (err: any) {
     err.statusCode = 401;
     throw err;
@@ -25,7 +26,11 @@ export default function(req: any, res: Response, next: NextFunction)  {
     error.statusCode = 401;
     throw error;
   }
+  if(decodedToken.role === "MEMBER" && config.memberUrls.includes(req.url)) {
+    req.user = decodedToken
+  } else if(decodedToken.role === "LIBRARIAN" && config.librarianUrls.includes(req.url)) {
+    req.user = decodedToken
+  }
 
-  req.userId = decodedToken.userIdPk;
   next();
 };

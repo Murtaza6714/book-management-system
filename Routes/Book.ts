@@ -3,6 +3,7 @@ import { BookController } from "../Controllers";
 
 const router = Router();
 
+router.get("/book/:bookId", BookController.getBookById);
 router.get("/add-book", BookController.getAddBook);
 router.post("/add-book", BookController.postAddBook);
 router.get("/books", BookController.getAllBooks);

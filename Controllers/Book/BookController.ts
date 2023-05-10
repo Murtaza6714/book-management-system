@@ -2,6 +2,7 @@ import { checkInputError } from "../../Utils";
 import { bookService, userAttendance } from "../../Service";
 import { NextFunction, Response } from "express";
 import { SuccessInterface } from "../../Service/shared/Services";
+import { userModel } from "../../Models";
 
 export const getAddBook = async (req: any, res: Response, next: NextFunction) => {
   try {
@@ -73,9 +74,13 @@ export const getBookById = async (req: any, res: Response, next: NextFunction) =
 export const getAllBooks = async (req: any, res: Response, next: NextFunction) => {
   try {
     // checkInputError(req);
-    //   const response = await userAttendance.markAttendance(req.body);
+      const response = await bookService.getAllBooks();
     // return res.status(response.statusCode).json(response);
-    return res.render('book/books')
+    return res.render('book/books', {
+      booksData: response.data,
+      error: false,
+      errorMessage: ""
+    })
   } catch (error) {
     next(error);
   }
@@ -110,9 +115,14 @@ export const postEditBook = async (req: any, res: Response, next: NextFunction) 
 export const deleteBookById = async (req: any, res: Response, next: NextFunction) => {
   try {
     // checkInputError(req);
-    const response = await userAttendance.markAttendance(req.body);
+    const response = await bookService.deleteBookById(req.query.bookId);
     // return res.status(response.statusCode).json(response);
-    return res.render('librarian/profile')
+    return res.render('member/members', {
+      membersData: response.data,
+      error: response.status === "error", 
+      errorMessage: response.status === "error"? response.message: "",
+      successMessage: response.message
+    })
   } catch (error) {
     next(error);
   }

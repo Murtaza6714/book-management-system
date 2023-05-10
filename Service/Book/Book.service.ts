@@ -6,6 +6,18 @@ import { logger } from '../../Utils'
 import { bookModel } from "../../Models/Book.model";
 
 class BookService extends Services {
+
+  async getAllBooks() {
+    try {
+      logger.info('Get All Books started');
+      const books = await bookModel.find({ isDeleted: false }).lean();
+      logger.info('Get All Books completed');
+      return this.success({ statusCode: 200, message: "Book Fetched Successfully!!", data: books });
+    } catch (error) {
+      logger.error(`Get All Books failed for Error ${error}`);
+      throw (error)
+    }
+  }
   async addBook(params: any) {
     try {
       logger.info('Add Book started for ');
@@ -70,6 +82,22 @@ class BookService extends Services {
       throw (error)
     }
   }
+
+  async deleteBookById(bookId: any) {
+    try {
+      logger.info('Delete Book By Id started for %s', bookId);
+      const deletedBook = await bookModel.findByIdAndUpdate(bookId, { isDeleted: true }, { new: true });
+      const books = await bookModel.find({ isDeleted: false }).lean();
+      if (!deletedBook) return this.success({status: "error", message: "Book Not Deleted", data: books});
+      logger.info('Delete Book By Id completed for %s', bookId);
+      return this.success({ statusCode: 200, message: "Book Deleted Successfully!!", data: books });
+    } catch (error) {
+      logger.error(`Delete Book failed for Error ${error}`);
+      throw (error)
+    }
+  }
+
+  
 
 }
 

@@ -7,6 +7,7 @@ router.get("/add-member", MemberController.getAddMember);
 router.post("/add-member", MemberController.postAddMember);
 router.get("/edit-member", MemberController.getEditMember);
 router.post("/edit-member", MemberController.postEditMember);
+router.get("/borrowed-books", MemberController.getBorrowedBooks);
 // router.get("/ping", DetectQcamController.ping);
 // router.post("/getLatestDetectedImage", DetectQcamController.loginController);
 
